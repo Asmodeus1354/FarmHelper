@@ -65,6 +65,7 @@ public class FarmHelperConfig extends Config {
     private transient static final String HUD = "HUD";
     private transient static final String DEBUG = "Debug";
     private transient static final String EXPERIMENTAL = "Experimental";
+    private transient static final String DATABASE = "Database";
 
     private transient static final File configRewarpFile = new File("farmhelper_rewarp.json");
 
@@ -273,8 +274,61 @@ public class FarmHelperConfig extends Config {
     )
     public static boolean drawSpawnLocation = true;
     //</editor-fold>
-
     //</editor-fold>
+
+    @Info(
+            text = "In development 1",
+            category = DATABASE,
+            type = InfoType.INFO,
+            size = 2
+    )
+    public static boolean testing = false;
+
+    @Info(
+            text = "Database Disconnect",
+            category = DATABASE,
+            type = InfoType.ERROR,
+            size = 2
+    )
+    public static boolean dbDisConnected = true; // ignored
+
+    @Info(
+            text = "Database Connected",
+            category = DATABASE,
+            type = InfoType.SUCCESS,
+            size = 2
+    )
+    public static boolean dbConnected = true; // ignored
+
+    @Switch(
+            name = "Connect",
+            category = DATABASE
+    )
+    public static boolean dbConnect = true;
+
+    @Text(
+            name = "Host",
+            category = DATABASE,
+            description = "The domain of the host",
+            placeholder = "x.xx.xxx.xx:3306"
+    )
+    public static String dbHost;
+
+    @Text(
+            name = "User",
+            category = DATABASE,
+            description = "The username to login into the DB"
+    )
+    public static String dbUser;
+
+    @Text(
+            name = "Password",
+            category = DATABASE,
+            description = "The password to login into the DB",
+            secure = true
+    )
+    public static String dbPassword;
+
 
     //<editor-fold desc="MISC">
     //<editor-fold desc="Keybinds">
@@ -2581,6 +2635,9 @@ public class FarmHelperConfig extends Config {
         this.addDependency("macroType", "Macro Type", () -> !MacroHandler.getInstance().isMacroToggled());
 
         this.addDependency("farmingSpeed", "customFarmingSpeed");
+
+        this.hideIf("dbConnected", () -> !dbConnect);
+        this.hideIf("dbDisConnected", () -> dbConnect);
 
         this.addDependency("customPitchLevel", "customPitch");
         this.addDependency("customYawLevel", "customYaw");
