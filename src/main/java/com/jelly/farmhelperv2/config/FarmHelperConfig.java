@@ -24,6 +24,7 @@ import com.jelly.farmhelperv2.hud.DebugHUD;
 import com.jelly.farmhelperv2.hud.ProfitCalculatorHUD;
 import com.jelly.farmhelperv2.hud.StatusHUD;
 import com.jelly.farmhelperv2.hud.UsageStatsHUD;
+import com.jelly.farmhelperv2.remote.database.DataBaseHandler;
 import com.jelly.farmhelperv2.util.BlockUtils;
 import com.jelly.farmhelperv2.util.LogUtils;
 import com.jelly.farmhelperv2.util.PlayerUtils;
@@ -285,7 +286,7 @@ public class FarmHelperConfig extends Config {
     public static boolean testing = false;
 
     @Info(
-            text = "Database Disconnect",
+            text = "Database Disconnect!",
             category = DATABASE,
             type = InfoType.ERROR,
             size = 2
@@ -293,18 +294,28 @@ public class FarmHelperConfig extends Config {
     public static boolean dbDisConnected = true; // ignored
 
     @Info(
-            text = "Database Connected",
+            text = "Database Connection Worked!",
             category = DATABASE,
             type = InfoType.SUCCESS,
             size = 2
     )
     public static boolean dbConnected = true; // ignored
 
-    @Switch(
-            name = "Connect",
+    @Button(
+            text = "Fetch",
+            name = "Click to fetch values from DB",
             category = DATABASE
     )
-    public static boolean dbConnect = true;
+    Runnable runnable = () -> {
+        if (DataBaseHandler.checkConnection()) {
+            dbConnected = true;
+            DataBaseHandler.fetch();
+            LogUtils.sendSuccess("Successfully connected to the database!");
+        } else {
+            dbConnected = false;
+            LogUtils.sendError("Failed to connect to the database!");
+        }
+    };
 
     @Text(
             name = "Host",
@@ -315,11 +326,11 @@ public class FarmHelperConfig extends Config {
     public static String dbHost;
 
     @Text(
-            name = "User",
+            name = "Username",
             category = DATABASE,
             description = "The username to login into the DB"
     )
-    public static String dbUser;
+    public static String dbUsername;
 
     @Text(
             name = "Password",
@@ -329,6 +340,29 @@ public class FarmHelperConfig extends Config {
     )
     public static String dbPassword;
 
+    @Number(
+            name = "Port",
+            category = DATABASE,
+            description = "The port to use for the DB connection",
+            min = 0,
+            max = 65535
+    )
+    public static int dbPort = 3306;
+
+    @Dropdown(
+            name = "Type",
+            category = DATABASE,
+            description = "The DB type you are using",
+            options = {"mysql", "postgresql", "sqlserver"}
+    )
+    public static String dbType = "mysql";
+
+    @Text(
+            name = "Name",
+            category = DATABASE,
+            description = "The name of the DB"
+    )
+    public static String dbName;
 
     //<editor-fold desc="MISC">
     //<editor-fold desc="Keybinds">
@@ -1572,7 +1606,7 @@ public class FarmHelperConfig extends Config {
             text = "Read the FarmHelper Guide to understand how to use this properly.",
             category = PEST_FARMER, size = 2
     )
-    public static boolean ignored1;
+    public static boolean ignored100;
 
     @Switch(
             name = "Enable Pest Farming", category = PEST_FARMER,
@@ -2636,8 +2670,8 @@ public class FarmHelperConfig extends Config {
 
         this.addDependency("farmingSpeed", "customFarmingSpeed");
 
-        this.hideIf("dbConnected", () -> !dbConnect);
-        this.hideIf("dbDisConnected", () -> dbConnect);
+        this.hideIf("dbConnected", () -> !dbConnected);
+        this.hideIf("dbDisConnected", () -> dbConnected);
 
         this.addDependency("customPitchLevel", "customPitch");
         this.addDependency("customYawLevel", "customYaw");
