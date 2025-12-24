@@ -98,7 +98,7 @@ public class FarmHelperConfig extends Config {
                     "S Shape - Pumpkin/Melon", // 1
                     "S Shape - Pumpkin/Melon Melongkingde", // 2
                     "S Shape - Pumpkin/Melon Default Plot", // 3
-                    "S Shape - Sugar Cane", // 4
+                    "S Shape - Sugar Cane/Wild Roses/Sunflower", // 4
                     "S Shape - Cactus", // 5
                     "S Shape - Cactus SunTzu Black Cat", // 6
                     "S Shape - Cocoa Beans", // 7
@@ -1418,13 +1418,6 @@ public class FarmHelperConfig extends Config {
     public static boolean dontTeleportToPlots = false;
 
     @Switch(
-            name = "Fly Pathfinder Oringo Compatible",
-            description = "Makes the fly pathfinder compatible with Oringo, but worse, zzz...",
-            category = PESTS_DESTROYER, subcategory = "Pests Destroyer"
-    )
-    public static boolean flyPathfinderOringoCompatible = false;
-
-    @Switch(
             name = "Pause the Pests Destroyer during Jacob's contests", category = PESTS_DESTROYER, subcategory = "Pests Destroyer",
             description = "Pauses the Pests Destroyer during Jacob's contests",
             size = 1
@@ -2660,7 +2653,7 @@ public class FarmHelperConfig extends Config {
     @Switch(
             name = "Shown Welcome GUI", category = EXPERIMENTAL, subcategory = "Experimental"
     )
-    public static boolean shownWelcomeGUI = false;
+    public static boolean shownWelcomeGUI2 = false;
 
     public FarmHelperConfig() {
         super(new Mod("Farm Helper", ModType.HYPIXEL, "/farmhelper/icon-mod/icon.png"), "/farmhelper/config.json");
@@ -3034,6 +3027,9 @@ public class FarmHelperConfig extends Config {
         COCOA_BEANS("Cocoa Beans"),
         MUSHROOM("Mushroom"),
         MUSHROOM_ROTATE("Mushroom"),
+        SUNFLOWER("Sunflower"),
+        MOONFLOWER("Moonflower"),
+        ROSE("Rose"),
         ;
 
         final String localizedName;
